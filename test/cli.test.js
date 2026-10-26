@@ -7,7 +7,7 @@ import os from 'node:os';
 import fs from 'fs-extra';
 import { exampleConfig } from '../src/config.js';
 
-const BIN = fileURLToPath(new URL('../bin/claude-code-ultimate-optimal-framework.js', import.meta.url));
+const BIN = fileURLToPath(new URL('../bin/foldermind.js', import.meta.url));
 const PKG = fileURLToPath(new URL('../package.json', import.meta.url));
 
 /** Run the CLI as a real subprocess with non-TTY stdin. */
@@ -26,11 +26,11 @@ test('--version prints the package version', async () => {
   assert.equal(stdout.trim(), pkg.version);
 });
 
-test('--help prints usage and the ccuof alias', async () => {
+test('--help prints usage and the foldermind command', async () => {
   const { code, stdout } = await run(['--help']);
   assert.equal(code, 0);
   assert.match(stdout, /USAGE/);
-  assert.match(stdout, /ccuof/);
+  assert.match(stdout, /npx foldermind/);
 });
 
 test('--example-config prints valid JSON', async () => {

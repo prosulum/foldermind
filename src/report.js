@@ -19,10 +19,10 @@ export function printResult(manifest, config) {
   console.log(chalk.gray(`  ${created.length} file(s) created${overwritten.length ? `, ${overwritten.length} overwritten` : ''}.\n`));
 
   console.log(chalk.bold('  What was created:\n'));
-  console.log(`  ${chalk.cyan('CLAUDE.md')}          ${S.dash} master map (always loaded)`);
+  console.log(`  ${chalk.cyan('AGENTS.md')}          ${S.dash} master map (always loaded; CLAUDE.md and GEMINI.md point here)`);
   console.log(`  ${chalk.cyan('CONTEXT.md')}         ${S.dash} task router`);
   console.log(`  ${chalk.cyan('PROJECT-REGISTRY.md')} ${S.dash} project index`);
-  console.log(`  ${chalk.cyan('company/')}           ${S.dash} brand, products, SOPs`);
+  console.log(`  ${chalk.cyan('company/')}           ${S.dash} brand, products, where your SOPs live`);
   console.log(`  ${chalk.cyan('departments/')}       ${S.dash} ${config.departments.length} department workspace(s)`);
   console.log(deptList);
   console.log(`  ${chalk.cyan('products/')}          ${S.dash} product workspaces`);
@@ -31,8 +31,8 @@ export function printResult(manifest, config) {
   console.log(`  ${chalk.cyan('_system/')}           ${S.dash} infra docs + project templates\n`);
 
   console.log(chalk.bold('  Next steps:\n'));
-  console.log(`  1. Open the workspace in Claude Code:`);
-  console.log(`     ${chalk.gray(`claude "${root}"`)}\n`);
+  console.log(`  1. Open this folder in your AI tool (Claude Code, Codex, Gemini CLI, Cursor...):`);
+  console.log(`     ${chalk.gray(root)}\n`);
   console.log(`  2. Fill in the ${chalk.cyan('[TBD]')} placeholders by pasting or speaking:`);
   console.log(`     ${chalk.gray('"Our brand voice is professional but warm..."')}`);
   console.log(`     ${chalk.gray('"Our main product is X, which does Y..."')}\n`);
@@ -44,7 +44,7 @@ export function printResult(manifest, config) {
   }
 
   console.log(chalk.gray(`  The workspace is self-updating ${S.dash} dump thoughts, voice notes,`));
-  console.log(chalk.gray('  or brain dumps directly into Claude and it will route them.\n'));
+  console.log(chalk.gray('  or brain dumps directly into your AI and it will route them.\n'));
 }
 
 /** Print the plan for a --dry-run (nothing was written). */

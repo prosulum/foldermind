@@ -23,8 +23,8 @@ const ALL_DEPARTMENTS = [
  * @param {string} [opts.outputDir]  when provided (via --output), skips the location prompt
  */
 export async function gatherConfig(opts = {}) {
-  console.log(chalk.bold.cyan('\n  Claude OS ' + S.dash + ' Workspace Setup\n'));
-  console.log(chalk.gray('  This will scaffold a Claude Code workspace with routing, memory,\n  and self-updating architecture.\n'));
+  console.log(chalk.bold.cyan('\n  foldermind ' + S.dash + ' Workspace Setup\n'));
+  console.log(chalk.gray('  This will scaffold an AI workspace with routing, memory,\n  and self-updating architecture.\n'));
 
   // --- Company info ---
   console.log(chalk.bold('  Company Info\n'));

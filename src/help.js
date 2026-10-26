@@ -9,14 +9,14 @@ export async function getVersion() {
 }
 
 export const HELP = `
-  claude-code-ultimate-optimal-framework  (alias: ccuof)
+  foldermind  (formerly claude-code-ultimate-optimal-framework)
 
-  Scaffold a Claude Code workspace with routing, memory, and a
-  self-updating architecture — in one command.
+  Give any AI a map of your business: an AI workspace with routing,
+  memory, and a self-updating architecture, in one command.
 
   USAGE
-    npx claude-code-ultimate-optimal-framework [command] [options]
-    ccuof [command] [options]      (after: npm install -g claude-code-ultimate-optimal-framework)
+    npx foldermind [command] [options]
+    foldermind [command] [options]      (after: npm install -g foldermind)
 
   COMMANDS
     init                 Create a workspace (default; runs the interactive setup)
@@ -27,24 +27,24 @@ export const HELP = `
                          (non-interactive; ideal for CI and scripting)
         --dry-run        Show what would be created without writing anything
     -f, --force          Overwrite an existing workspace without asking
-    -y, --yes            Skip confirmation prompts (assume "yes")
+    -y, --yes            Skip confirmation prompts (assume "yes"; overwrites like --force)
         --example-config Print an example --config JSON file and exit
     -v, --version        Print the version and exit
     -h, --help           Show this help and exit
 
   EXAMPLES
     # Interactive setup in the current directory
-    ccuof
+    foldermind
 
     # Interactive setup into a specific folder
-    ccuof --output ./my-workspace
+    foldermind --output ./my-workspace
 
     # Preview without writing
-    ccuof --dry-run --output ./my-workspace
+    foldermind --dry-run --output ./my-workspace
 
     # Non-interactive (CI / scripting)
-    ccuof --example-config > workspace.json   # then edit it
-    ccuof --config workspace.json --output ./my-workspace
+    foldermind --example-config > workspace.json   # then edit it
+    foldermind --config workspace.json --output ./my-workspace
 
-  Docs: https://github.com/prosulum/claude-code-ultimate-optimal-framework
+  Docs: https://github.com/prosulum/foldermind
 `;

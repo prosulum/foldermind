@@ -22,7 +22,7 @@ export function generateClaudeMd(config) {
     '| **Create a new project** | Say: "New project: [description]" |',
     '| **Write marketing copy or campaigns** | `departments/marketing/CONTEXT.md` |',
     '| **Work on a sales process or pipeline** | `departments/sales/CONTEXT.md` |',
-    '| **Design a client workflow or SOP** | `departments/operations/CONTEXT.md` |',
+    ...(departments.includes('operations') ? ['| **Design a client workflow** | `departments/operations/CONTEXT.md` |'] : []),
     ...departments.filter(d => !['marketing','sales','operations'].includes(d)).map(d =>
       `| **${toTitle(d)} work** | \`departments/${d}/CONTEXT.md\` |`
     ),
@@ -49,13 +49,16 @@ A workspace system for ${company.name}. An agent drops into a workspace, reads i
 
 **CONTEXT.md** (top-level) routes you to the right workspace. This file is the map.
 
+**How to work:** act on routine work without asking for approval, then report what you did. Stop and ask only when information you need is not in these files (never guess names, prices, dates or policies) or when a rule in this workspace says to escalate.
+
 ---
 
 ## Folder Structure
 
 \`\`\`
 workspace/
-├── CLAUDE.md                       ← You are here (always loaded)
+├── AGENTS.md                       ← You are here (always loaded)
+├── CLAUDE.md, GEMINI.md            ← One-line pointers to AGENTS.md
 ├── CONTEXT.md                      ← Task router
 ├── PROJECT-REGISTRY.md             ← Index of all active projects
 │
@@ -63,7 +66,7 @@ workspace/
 │   ├── CONTEXT.md
 │   ├── voice-brand.md              ← Brand voice, tone, messaging rules
 │   ├── products.md                 ← Product catalog
-│   └── sops/                       ← Internal SOPs (add as created)
+│   └── sop-sources.md              ← Where your team's SOPs live (e.g. Google Docs)
 │
 ├── departments/                    ← Department workspaces
 ${deptRows}
@@ -90,7 +93,7 @@ ${config.infra.hasVps ? '    │   ├── vps.md\n' : ''}${config.infra.hasLo
 | Want to... | Go here |
 |------------|---------|
 ${navRows}
-| **Write or edit a company SOP** | \`company/CONTEXT.md\` |
+| **Find or draft a team SOP** | \`company/sop-sources.md\` (where the team's SOPs live; draft new ones in \`projects/\`) |
 | **Check or update infrastructure** | \`_system/CONTEXT.md\` |
 
 ---
@@ -110,7 +113,7 @@ When I say **"New project: [description]"**:
 2. Copy the matching template from \`_system/templates/\`
 3. Create \`projects/[slug]/\` with the template files
 4. Add a row to **Active Projects** above and to \`PROJECT-REGISTRY.md\`
-5. Confirm what was created
+5. Report what was created
 
 ---
 
@@ -120,7 +123,7 @@ When I say **"New project: [description]"**:
 |-------------|---------|---------|
 | Project folders | \`[slug]/\` | \`q2-newsletter-campaign/\` |
 | Deliverables | \`[slug]-v[n].[ext]\` | \`onboarding-sop-v2.docx\` |
-| SOPs | \`sop-[process].md\` | \`sop-client-onboarding.md\` |
+| SOP drafts (in \`projects/\`) | \`sop-[process].md\` | \`sop-client-onboarding.md\` |
 | Newsletters | \`[YYYY-MM-DD]-[slug].md\` | \`2026-03-10-launch-week.md\` |
 | Social posts | \`[platform]-[slug].md\` | \`linkedin-launch-announce.md\` |
 
@@ -151,7 +154,7 @@ The workspace is **self-updating and self-generating**. When given unstructured 
 | Brand voice, tone, audience, messaging | \`company/voice-brand.md\` |
 | Product description, features, positioning | \`company/products.md\` |
 | How a department functions | \`departments/[dept]/CONTEXT.md\` |
-| A business process or repeatable workflow | \`company/sops/sop-[process].md\` (create if new) |
+| A new SOP for the team | Draft it in \`projects/\` for the owner to move into the team's SOP library (e.g. Google Docs), then list its location in \`company/sop-sources.md\` |
 | New product or major tool | \`company/products.md\` + \`products/[name]/CONTEXT.md\` |
 | Infrastructure or tech changes | \`_system/infra/\` files |
 | New project need | Trigger New Project flow (see above) |
@@ -161,7 +164,7 @@ The workspace is **self-updating and self-generating**. When given unstructured 
 2. **Route** — identify which file(s) this belongs in
 3. **Edit surgically** — fill \`[TBD]\` placeholders, never erase existing content
 4. **Propagate** — if update affects other files, update those too
-5. **Confirm** — tell user what changed and where
+5. **Report** — tell the user what changed and where (no need to ask first)
 `;
 }
 
@@ -239,7 +242,7 @@ export function generateCompanyContextMd(config) {
 |------|------|------|
 | Writing any copy or messaging | \`voice-brand.md\` | \`products.md\`, SOPs |
 | Referencing products / services | \`products.md\` | \`voice-brand.md\` |
-| Writing about a business process | Specific SOP from \`sops/\` | Everything else |
+| Writing about a business process | The team's SOP for it (location in \`sop-sources.md\`) | Everything else |
 | Both copy + product context | Both | SOPs |
 
 ---
@@ -248,13 +251,13 @@ export function generateCompanyContextMd(config) {
 
 - \`voice-brand.md\` — Tone, personality, messaging rules, audience profiles
 - \`products.md\` — Product catalog, descriptions, positioning
-- \`sops/\` — Internal SOPs (created as processes are documented)
+- \`sop-sources.md\` — Where the team's SOPs live (e.g. Google Docs). Read them there; never edit them unless asked
 
 ---
 
-## SOP Naming
+## SOP Draft Naming
 
-\`sop-[process].md\` — e.g., \`sop-client-onboarding.md\`, \`sop-weekly-reporting.md\`
+When drafting a new SOP for the team (in \`projects/\`): \`sop-[process].md\`, e.g. \`sop-client-onboarding.md\`. The owner moves it into the team's SOP library and lists it in \`sop-sources.md\`.
 `;
 }
 
@@ -399,10 +402,10 @@ const DEPT_DETAILS = {
   },
   operations: {
     tasks: [
-      ['Design a client workflow', '1-2 relevant SOPs from `company/sops/`', 'Marketing/sales docs'],
-      ['Write an SOP', '1-2 relevant SOPs from `company/sops/`', 'All other docs'],
+      ['Design a client workflow', '1-2 relevant team SOPs (see `company/sop-sources.md`)', 'Marketing/sales docs'],
+      ['Write an SOP', '1-2 relevant team SOPs (see `company/sop-sources.md`)', 'All other docs'],
       ['Prepare a client deliverable', 'None', 'All docs'],
-      ['Review / revise an SOP', 'The specific SOP being revised', 'All other docs'],
+      ['Review / revise an SOP (only when asked)', 'The specific team SOP being revised', 'All other docs'],
     ],
     tools: [
       ['`/docx`', 'Formatted SOPs and process docs'],
@@ -425,7 +428,7 @@ const DEPT_DETAILS = {
   hr: {
     tasks: [
       ['Write a job posting', '`company/voice-brand.md`', 'Infra docs'],
-      ['Build a recruiting process', '`company/sops/`', 'All other docs'],
+      ['Build a recruiting process', 'Team SOPs (see `company/sop-sources.md`)', 'All other docs'],
       ['Draft an HR policy', '1-2 relevant SOPs', 'All other docs'],
     ],
     tools: [
@@ -447,7 +450,7 @@ const DEPT_DETAILS = {
   'customer-success': {
     tasks: [
       ['Write client-facing communication', '`company/voice-brand.md`', 'Infra docs'],
-      ['Document a client process', '`company/sops/`', 'All other docs'],
+      ['Document a client process', 'Team SOPs (see `company/sop-sources.md`)', 'All other docs'],
       ['Build an onboarding flow', '`company/products.md`, `voice-brand.md`', 'Dept docs'],
     ],
     tools: [
@@ -823,8 +826,8 @@ export function generateVaWorkflowTemplateMd() {
 
 | Task | Load These | Skip These |
 |------|-----------|-----------|
-| Design workflow | \`company/sops/\` (1-2 relevant SOPs for style reference) | All other docs |
-| Write SOP | \`company/sops/\` (1-2 relevant SOPs for style reference) | All other docs |
+| Design workflow | Team SOPs listed in \`company/sop-sources.md\` (1-2 for style reference) | All other docs |
+| Write SOP | Team SOPs listed in \`company/sop-sources.md\` (1-2 for style reference) | All other docs |
 | Client deliverable prep | None | All docs |
 | Review / revise | The specific SOP being revised | All other docs |
 
@@ -845,7 +848,7 @@ export function generateVaWorkflowTemplateMd() {
 3. Draft SOP / workflow
 4. Review with client feedback
 5. Finalize → \`output/sop-[process]-v[n].[ext]\`
-6. If SOP is company-internal → copy to \`company/sops/sop-[process].md\`
+6. If SOP is company-internal → owner moves it into the team's SOP library (e.g. Google Docs); list its location in \`company/sop-sources.md\`
 7. Mark complete → update **Status** above + \`PROJECT-REGISTRY.md\`
 
 ---
@@ -927,5 +930,23 @@ export function generateProductBuildTemplateMd() {
 |------|------|---------|
 | Web Search MCP | Specs phase | Library docs, best practices, API references |
 | \`_system/infra/vps.md\` | Deployment | VPS deployment pattern and commands |
+`;
+}
+
+// ─── AGENTS.md pointers + SOP sources ───────────────────────────────────────
+
+/** Tools that look for their own file name (Claude, Gemini) get a one-line pointer to the one real map. */
+export const AGENTS_POINTER = 'Read AGENTS.md first. It is the map for this folder.\n';
+
+export function generateSopSources() {
+  return `# Where the Team's SOPs Live
+
+Your team's SOPs stay where your people already work (for example Google Docs in Google Drive), not in this folder.
+List each SOP folder or document below. The AI reads them there to learn how the business works, through a
+connector, a shared link or an exported copy you give it, and never edits them unless you ask.
+
+| SOP or folder | Location (link) |
+|---------------|-----------------|
+| | |
 `;
 }

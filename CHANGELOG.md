@@ -3,6 +3,20 @@
 All notable changes to this project are documented here. This project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] — 2026-10-25
+
+Renamed from `claude-code-ultimate-optimal-framework` to **`foldermind`**, and made AI-agnostic.
+
+### Changed
+- **Package and command are now `foldermind`.** `npx foldermind` works (the package name and the command match). The old package name is deprecated with a pointer here.
+- **`AGENTS.md` is the master map** (the file name most AI agents look for). `CLAUDE.md` and `GEMINI.md` are one-line pointers to it. The overwrite guard also protects an existing `AGENTS.md`.
+- **SOPs stay where your team works.** The workspace no longer creates `company/sops/`. It creates `company/sop-sources.md`, which records where the team's SOPs live (for example Google Docs) so the AI can read them there.
+- **README** rewritten for owners, with a copy-paste prompt that lets your AI do the whole setup.
+- **The overwrite guard covers every file the tool would write**, not just four marker files.
+
+### Removed
+- The `ccuof` and `claude-code-ultimate-optimal-framework` commands. Use `foldermind`.
+
 ## [1.1.1] — 2026-07-19
 
 ### Fixed

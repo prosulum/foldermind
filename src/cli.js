@@ -4,7 +4,7 @@ import { confirm } from '@inquirer/prompts';
 
 import { gatherConfig } from './prompts.js';
 import { normalizeConfig, validateConfig, loadConfigFile, exampleConfig } from './config.js';
-import { scaffold, resolveRoot, workspaceExists } from './scaffold.js';
+import { scaffold, resolveRoot } from './scaffold.js';
 import { printResult, printDryRun } from './report.js';
 import { HELP, getVersion } from './help.js';
 import { S } from './symbols.js';
@@ -93,8 +93,8 @@ export async function main(args) {
       throw new Error(
         'Interactive setup needs a terminal (TTY).\n' +
         '  For non-interactive use, pass a config file:\n' +
-        '    ccuof --example-config > workspace.json   # then edit it\n' +
-        '    ccuof --config workspace.json --output ./my-workspace'
+        '    foldermind --example-config > workspace.json   # then edit it\n' +
+        '    foldermind --config workspace.json --output ./my-workspace'
       );
     }
     const raw = await gatherConfig({ outputDir: values.output });
@@ -109,7 +109,8 @@ export async function main(args) {
   const root = resolveRoot(config);
   if (!dryRun) {
     const action = overwritePolicy({
-      exists: await workspaceExists(root),
+      // Ask the scaffolder what it would overwrite, so every file it writes is guarded, not a fixed list.
+      exists: (await scaffold(config, { dryRun: true })).overwritten.length > 0,
       force,
       assumeYes,
       interactive,

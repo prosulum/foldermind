@@ -16,6 +16,8 @@ import {
   generateBizInitiativeTemplateMd,
   generateVaWorkflowTemplateMd,
   generateProductBuildTemplateMd,
+  generateSopSources,
+  AGENTS_POINTER,
 } from './templates.js';
 
 /**
@@ -23,7 +25,7 @@ import {
  * directory, we treat it as an existing workspace (or a directory holding files
  * we would clobber) and require confirmation / --force before writing.
  */
-export const WORKSPACE_MARKERS = ['CLAUDE.md', 'CONTEXT.md', 'PROJECT-REGISTRY.md'];
+export const WORKSPACE_MARKERS = ['AGENTS.md', 'CLAUDE.md', 'CONTEXT.md', 'PROJECT-REGISTRY.md'];
 
 /** Resolve the absolute workspace root from a config's outputDir. */
 export function resolveRoot(config) {
@@ -73,7 +75,9 @@ export async function scaffold(config, opts = {}) {
   };
 
   // ── Root files ──
-  await write('CLAUDE.md', generateClaudeMd(config));
+  await write('AGENTS.md', generateClaudeMd(config));
+  await write('CLAUDE.md', AGENTS_POINTER);
+  await write('GEMINI.md', AGENTS_POINTER);
   await write('CONTEXT.md', generateContextMd(config));
   await write('PROJECT-REGISTRY.md', generateProjectRegistry(config));
 
@@ -81,7 +85,7 @@ export async function scaffold(config, opts = {}) {
   await write('company/CONTEXT.md', generateCompanyContextMd(config));
   await write('company/voice-brand.md', generateVoiceBrand(config));
   await write('company/products.md', generateProductsMd(config));
-  await mkdir('company/sops');
+  await write('company/sop-sources.md', generateSopSources());
 
   // ── departments/ ──
   for (const dept of config.departments) {

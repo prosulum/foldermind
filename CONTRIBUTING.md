@@ -1,17 +1,17 @@
 # Contributing
 
-Thanks for your interest in improving `claude-code-ultimate-optimal-framework`.
+Thanks for your interest in improving `foldermind`.
 
 ## Local development
 
 ```bash
-git clone https://github.com/prosulum/claude-code-ultimate-optimal-framework.git
-cd claude-code-ultimate-optimal-framework
+git clone https://github.com/prosulum/foldermind.git
+cd foldermind
 npm install
 
 # Run the CLI from source
-node bin/claude-code-ultimate-optimal-framework.js --help
-node bin/claude-code-ultimate-optimal-framework.js --dry-run --output ./scratch
+node bin/foldermind.js --help
+node bin/foldermind.js --dry-run --output ./scratch
 
 # Run the test suite
 npm test

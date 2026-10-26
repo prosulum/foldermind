@@ -29,7 +29,10 @@ test('scaffold creates the expected files', async () => {
     const m = await scaffold({ ...base, outputDir: dir });
     assert.equal(m.root, dir);
     const expected = [
+      'AGENTS.md',
       'CLAUDE.md',
+      'GEMINI.md',
+      'company/sop-sources.md',
       'CONTEXT.md',
       'PROJECT-REGISTRY.md',
       'company/CONTEXT.md',
@@ -91,9 +94,26 @@ test('generated infra section uses a cloud-agnostic sync label (no hardcoded ven
   const dir = tmp();
   try {
     await scaffold({ ...base, outputDir: dir });
-    const md = await fs.readFile(path.join(dir, 'CLAUDE.md'), 'utf8');
+    const md = await fs.readFile(path.join(dir, 'AGENTS.md'), 'utf8');
     assert.match(md, /Cloud sync \(Dropbox \/ OneDrive/);
     assert.doesNotMatch(md, /\| Full Dropbox \|/);
+  } finally {
+    await fs.remove(dir);
+  }
+});
+
+test('AGENTS.md is the map; CLAUDE.md and GEMINI.md only point to it; SOPs stay outside the workspace', async () => {
+  const dir = tmp();
+  try {
+    await scaffold({ ...base, outputDir: dir });
+    const map = await fs.readFile(path.join(dir, 'AGENTS.md'), 'utf8');
+    assert.match(map, /act on routine work without asking for approval/);
+    for (const f of ['CLAUDE.md', 'GEMINI.md']) {
+      assert.equal(await fs.readFile(path.join(dir, f), 'utf8'), 'Read AGENTS.md first. It is the map for this folder.\n');
+    }
+    assert.match(await fs.readFile(path.join(dir, 'company/sop-sources.md'), 'utf8'), /Google Docs/);
+    assert.equal(await fs.pathExists(path.join(dir, 'company/sops')), false);
+    assert.equal(await fs.pathExists(path.join(dir, 'sops')), false);
   } finally {
     await fs.remove(dir);
   }

@@ -1,11 +1,10 @@
 {
-  "name": "claude-code-ultimate-optimal-framework",
-  "version": "1.1.1",
-  "description": "Scaffold a Claude Code workspace with routing, memory, and a self-updating architecture — in one command. Works on macOS, Linux, and Windows.",
+  "name": "foldermind",
+  "version": "2.0.0",
+  "description": "Your AI forgets your business. foldermind gives it a map: one command builds a plain-text workspace any AI can read (Claude, Codex, Gemini, Cursor).",
   "type": "module",
   "bin": {
-    "claude-code-ultimate-optimal-framework": "bin/claude-code-ultimate-optimal-framework.js",
-    "ccuof": "bin/claude-code-ultimate-optimal-framework.js"
+    "foldermind": "bin/foldermind.js"
   },
   "files": [
     "bin",
@@ -15,8 +14,8 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "start": "node bin/claude-code-ultimate-optimal-framework.js",
-    "dev": "node bin/claude-code-ultimate-optimal-framework.js",
+    "start": "node bin/foldermind.js",
+    "dev": "node bin/foldermind.js",
     "test": "node --test"
   },
   "dependencies": {
@@ -43,15 +42,21 @@
     "template",
     "context-engineering",
     "cross-platform",
-    "windows"
+    "windows",
+    "agents-md",
+    "codex",
+    "chatgpt",
+    "gemini",
+    "sop",
+    "small-business"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/prosulum/claude-code-ultimate-optimal-framework.git"
+    "url": "git+https://github.com/prosulum/foldermind.git"
   },
-  "homepage": "https://github.com/prosulum/claude-code-ultimate-optimal-framework#readme",
+  "homepage": "https://github.com/prosulum/foldermind#readme",
   "bugs": {
-    "url": "https://github.com/prosulum/claude-code-ultimate-optimal-framework/issues"
+    "url": "https://github.com/prosulum/foldermind/issues"
   },
   "author": "ProSulum",
   "license": "MIT"
