@@ -253,6 +253,16 @@ A few Windows notes:
 
 ---
 
+## What it reads, writes and connects to
+
+For anyone checking foldermind before it runs on a work computer (an IT provider, for example). This describes version 2.0.0; the code is in [`src/`](./src).
+
+- **Writes:** plain-text Markdown files and empty folders, only inside the `--output` folder (the current folder if you don't pass one). Folder names that come from your answers (departments, products, a server name) are reduced to lowercase letters, numbers and hyphens, so an answer can't point a path outside that folder. `--dry-run` writes nothing, and `--example-config` only prints to the screen.
+- **Reads:** the `--config` file you name, whether its own files already exist in the output folder (so it can stop before overwriting), and its own `package.json` for `--version`. Nothing else on the computer.
+- **Connects to:** nothing. foldermind's code makes no network calls, collects no usage data and starts no other programs. The one download is `npx` fetching foldermind and its three dependencies ([`@inquirer/prompts`](https://www.npmjs.com/package/@inquirer/prompts), [`chalk`](https://www.npmjs.com/package/chalk), [`fs-extra`](https://www.npmjs.com/package/fs-extra)) from the npm registry. Pin a version (`npx foldermind@2.0.0`) to run exactly the code you reviewed.
+
+---
+
 ## Troubleshooting
 
 | Symptom | Fix |
